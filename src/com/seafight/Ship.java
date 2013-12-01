@@ -1,6 +1,5 @@
 package com.seafight;
 
-import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +14,7 @@ public class Ship {
     private int x;
     private int y;
     private boolean verticalOrientation;
-    private List<Shot> wounds = new ArrayList<Shot>();
+    private int wounds = 0;
 
     public Ship(int length, int x, int y, boolean verticalOrientation) {
         this.length = length;
@@ -36,15 +35,19 @@ public class Ship {
     }
 
     public void makeWound(Shot shot) {
-        wounds.add(shot);
+        wounds++;
     }
 
     public boolean isDestroyed() {
-        if (wounds.size() == length) {
+        if (wounds == length) {
             return true;
         } else {
             return false;
         }
 
+    }
+
+    public boolean isVerticalOrientation() {
+        return verticalOrientation;
     }
 }
