@@ -1,20 +1,14 @@
 package com.seafight;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Admin
- * Date: 25.11.13
- * Time: 15:37
- * To change this template use File | Settings | File Templates.
- */
 public class Ship {
     private int length;
     private int x;
     private int y;
     private boolean verticalOrientation;
-    private int wounds = 0;
+    private List<Shot> wounds = new ArrayList<Shot>();
 
     public Ship(int length, int x, int y, boolean verticalOrientation) {
         this.length = length;
@@ -22,6 +16,11 @@ public class Ship {
         this.y = y;
         this.verticalOrientation = verticalOrientation;
     }
+
+    public List<Shot> getWounds() {
+        return wounds;
+    }
+
     public int getLength() {
         return length;
     }
@@ -35,11 +34,13 @@ public class Ship {
     }
 
     public void makeWound(Shot shot) {
-        wounds++;
+        wounds.add(shot);
+
     }
 
     public boolean isDestroyed() {
-        if (wounds == length) {
+
+        if (wounds.size() == length) {
             return true;
         } else {
             return false;

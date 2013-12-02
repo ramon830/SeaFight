@@ -22,10 +22,48 @@ public class BattleField {
     }
 
     public void makeShot(int x, int y) {
+        shots.add(new Shot(x, y));
+        for (Ship ship : ships) {
+
+            int x1;
+            int x2;
+            int y1;
+            int y2;
+            if (ship.isVerticalOrientation()) {
+                x1 = ship.getX();
+                x2 = ship.getX();
+                y1 = ship.getY();
+                y2 = ship.getY() + ship.getLength() - 1;
+            } else {
+                x1 = ship.getX();
+                x2 = ship.getX() + ship.getLength() - 1;
+                y1 = ship.getY();
+                y2 = ship.getY();
+            }
+
+            int a1 = x1 - x;
+            int a2 = y1 - y;
+            int b1 = x2 - x;
+            int b2 = y2 - y;
+
+
+            if (((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) == 0 && (a1 * b1 + a2 * b2) <= 0) {
+                ship.makeWound(new Shot(x, y));
+
+            }
+
+        }
     }
 
     public boolean isDefeat() {
-        return false;
+        int s = 0;
+        for (Ship ship : ships) {
+            if (ship.isDestroyed()) {
+                s++;
+            }
+        }
+
+        return s == ships.size() ? true : false;
     }
 
     public void computerPlaceShip() {
@@ -39,7 +77,7 @@ public class BattleField {
         }
         int[] sizeShips = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
         for (int sizeShip : sizeShips) {
-           boolean out;
+            boolean out;
             do {
                 out = false;
                 Random generator = new Random();
@@ -95,6 +133,10 @@ public class BattleField {
             while (out);
 
         }
+    }
+
+    public void computerShots() {
+
     }
 
 
