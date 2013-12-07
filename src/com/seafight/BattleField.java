@@ -21,7 +21,7 @@ public class BattleField {
         return shots;
     }
 
-    public void makeShot(int x, int y) {
+    public boolean makeShot(int x, int y) {
         shots.add(new Shot(x, y));
         for (Ship ship : ships) {
 
@@ -49,10 +49,12 @@ public class BattleField {
 
             if (((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) == 0 && (a1 * b1 + a2 * b2) <= 0) {
                 ship.makeWound(new Shot(x, y));
-
+                return true;
             }
 
         }
+
+        return false;
     }
 
     public boolean isDefeat() {
@@ -136,6 +138,65 @@ public class BattleField {
     }
 
     public void computerShots() {
+        final int SIZE_FIELD = 10;
+        boolean[][] field = new boolean[SIZE_FIELD][SIZE_FIELD];
+        boolean wound = false;
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field.length; j++) {
+                field[i][j] = false;
+            }
+        }
+
+        for (Ship ship : ships) {
+            if (ship.isDestroyed()) {
+                int x1, x2;
+                int y1, y2;
+
+                if (ship.isVerticalOrientation()) {
+                    x1 = ship.getX() - 1;
+                    x2 = ship.getX() + 1;
+                    y1 = ship.getY() - 1;
+                    y2 = ship.getY() + ship.getLength();
+                } else {
+                    x1 = ship.getX() - 1;
+                    x2 = ship.getX() + ship.getLength();
+                    y1 = ship.getY() - 1;
+                    y2 = ship.getY() + 1;
+                }
+
+                for (int i = x1; i <= x2; i++) {
+                    for (int j = y1; j <= y2; j++) {
+
+                        if (i >= 0 && i < field.length && j >= 0 && j < field.length) {
+                            field[j][i] = true;
+
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+        for (Shot shot : shots) {
+            field[shot.getY()][shot.getX()] = true;
+        }
+
+        for (Ship ship : ships) {
+            if (ship.isDestroyed() != true && ship.getWounds().size() > 0) {
+                wound = true;
+            }
+        }
+
+        if (!wound) {
+
+        }
+
+        if (makeShot(x, y)) {
+            computerShots();
+        }
 
     }
 
